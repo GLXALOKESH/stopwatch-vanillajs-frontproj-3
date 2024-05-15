@@ -1,37 +1,57 @@
 console.log("Script running...");
-let hour = 0;
 let minute = 0;
 let second = 0;
-second = (second<10)?("0"+second):second;
-    minute = (minute<10)?("0"+minute):minute;
-    hour = (hour<10)?("0"+hour):hour;
+let millisecond = 0;
+
 let time = document.createElement("p")
 time.classList = "t-text"
-time.innerText = `${hour}:${minute}:${second}`
+time.innerText = `00:00:00`
 let timerbase = document.getElementById("timer")
 timerbase.append(time)
 
+function getzero(){
+    let nsecond = (millisecond<10)?("0"+millisecond):millisecond;
+    let nminute = (second<10)?("0"+second):second;
+    let nhour = (minute<10)?("0"+minute):minute;
+
+    let timeupdate = `${nhour}:${nminute}:${nsecond}`
+    time.innerText = timeupdate
+}
 function update() {
     
-        second++
+        millisecond++
     
+    if (millisecond == 100) {
+        millisecond = 0;
+        second++;
+    }
     if (second == 60) {
         second = 0;
         minute++;
     }
-    if (minute == 60) {
-        minute = 0;
-        hour++;
-    }
-    second = (second<10)?("0"+second):second;
-    minute = (minute<10)?("0"+minute):minute;
-    hour = (hour<10)?("0"+hour):hour;
-
-    let timeupdate = `${second}:${minute}:${second}`
-    time.innerText = timeupdate
+    getzero()
 }
+let inter 
 
 let playbtn = document.getElementById("play")
+
 playbtn.onclick =()=>{
-    setInterval(update,1000)
+ inter = setInterval(update,10) 
+ playbtn.disabled = true;
 }
+
+let resetbtn = document.getElementById("reset")
+resetbtn.onclick =()=>{
+    millisecond=0;
+    second =0;
+    minute=0;
+    getzero()
+
+}
+let pausebtn = document.getElementById("pause");
+pausebtn.onclick =() => {
+    clearInterval(inter);
+ playbtn.disabled = false;
+
+}
+
